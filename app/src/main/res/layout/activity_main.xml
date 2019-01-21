@@ -24,7 +24,7 @@
         android:paddingTop="2dp">
 
         <RadioButton
-            android:id="@+id/radio_borrow"
+            android:id="@+id/radio_upload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -35,7 +35,7 @@
             android:textColor="@color/textcolor_selector" />
 
         <RadioButton
-            android:id="@+id/radio_store"
+            android:id="@+id/radio_files"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -47,7 +47,7 @@
 
 
         <RadioButton
-            android:id="@+id/radio_mine"
+            android:id="@+id/radio_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

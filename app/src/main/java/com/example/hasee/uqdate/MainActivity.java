@@ -1,13 +1,99 @@
 package com.example.hasee.uqdate;
 
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.hasee.uqdate.adapter.MainPagerAdapter;
+import com.example.hasee.uqdate.pager.BasePager;
+import com.example.hasee.uqdate.pager.FilePager;
+import com.example.hasee.uqdate.pager.SettingPager;
+import com.example.hasee.uqdate.pager.UploadPager;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
+    RadioGroup radioGroup;
+    ViewPager vp;
+    RadioButton rbtn_uplod,rbtn_file,rbtn_setting;
+    RadioButton [] radioButtons;
+    private List<BasePager> pagers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        radioGroup = findViewById(R.id.radioGroup_main);
+        rbtn_uplod = findViewById(R.id.radio_upload);
+        rbtn_file = findViewById(R.id.radio_files);
+        rbtn_setting = findViewById(R.id.radio_setting);
+        vp = findViewById(R.id.vp_main);
+        vp.setOnPageChangeListener(this);
+        radioGroup.setOnCheckedChangeListener(this);
+        initPager(vp);
+//        radioButtons = new RadioButton[]{news, video, live, radio, mine};
+        //设置默认展示页
+        rbtn_uplod.setChecked(true);
+    }
+
+    //向ViewPager中添加数据
+    private void initPager(ViewPager v){
+        //数据源
+        pagers = new ArrayList<>();
+        pagers.add(new UploadPager(this));
+        pagers.add(new FilePager(this));
+        pagers.add(new SettingPager(this));
+//适配器
+        MainPagerAdapter mAdapter = new MainPagerAdapter(pagers);
+        //配置适配器
+        v.setAdapter(mAdapter);
+        //默认加载第一页
+        pagers.get(0).initData(null);
+    }
+    //radioGroup监听
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        int index = -1;
+        switch (checkedId){
+            case R.id.radio_upload:
+                index = 0;
+                break;
+            case R.id.radio_files:
+                index = 1;
+                break;
+            case R.id.radio_setting:
+                index = 2;
+                break;
+
+
+        }
+        if(index >= 0){
+            vp.setCurrentItem(index);
+        }
+    }
+    //ViewPager监听
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        Log.i("", "----onPageSelected----position = " + position);
+        int resld = radioGroup.getChildAt(position).getId();
+        radioGroup.check(resld);
+        //下面的方法也可以
+//        radioButtons[position].setChecked(true);
+
+        pagers.get(position).initData(null);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
     }
 }

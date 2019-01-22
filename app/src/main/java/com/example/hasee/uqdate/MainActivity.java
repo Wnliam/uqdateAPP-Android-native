@@ -15,7 +15,15 @@ import com.example.hasee.uqdate.pager.UploadPager;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+* @Description:    用户主UI
+* @Author:         Wnliam
+* @CreateDate:     2019/1/22 10:04
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/22 10:04
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
     RadioGroup radioGroup;
     ViewPager vp;

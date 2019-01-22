@@ -7,7 +7,15 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-
+/**
+* @Description:    这个类用于对引导页的ViewPager进行内容适配
+* @Author:         Wnliam
+* @CreateDate:     2019/1/22 9:38
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/22 9:38
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class GuidePagerAdapter extends PagerAdapter {
     private static String TAG = "GuidePagerAdapter";
     private List<View> views;

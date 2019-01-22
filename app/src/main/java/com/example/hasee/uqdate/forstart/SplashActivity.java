@@ -13,7 +13,15 @@ import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
-
+/**
+* @Description:    启动页
+* @Author:         Wnliam
+* @CreateDate:     2019/1/22 10:27
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/22 10:27
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class SplashActivity extends Activity {
     //延时三秒后跳转到引导页
     private static final int Delayed = 3000;

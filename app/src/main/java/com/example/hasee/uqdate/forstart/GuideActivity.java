@@ -21,7 +21,15 @@ import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+* @Description:    这个类负责处理引导页的处理逻辑和小点与引导页的联动
+* @Author:         Wnliam
+* @CreateDate:     2019/1/22 9:36
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/22 9:36
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class GuideActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final static String TAG = "GuideActivity";
     ViewPager viewPager;
@@ -45,6 +53,11 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
 
         initData();
 //        initDots();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void initData() {

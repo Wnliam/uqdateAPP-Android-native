@@ -10,9 +10,14 @@ import com.example.hasee.uqdate.pager.BasePager;
 import java.util.List;
 
 /**
- * 主页页面切换的适配器
- * Created by panshq on 2017/3/3.
- */
+* @Description:    主页页面切换的适配器
+* @Author:         Wnliam
+* @CreateDate:     2019/1/22 10:37
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/22 10:37
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class MainPagerAdapter extends PagerAdapter {
 
     private List<BasePager> pagers;

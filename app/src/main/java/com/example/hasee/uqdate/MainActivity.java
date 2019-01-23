@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         //配置适配器
         v.setAdapter(mAdapter);
         //默认加载第一页
-        pagers.get(0).initData(null);
+        pagers.get(0).initData(getIntent());
     }
     //radioGroup监听
     @Override

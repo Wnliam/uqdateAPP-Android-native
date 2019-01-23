@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.hasee.uqdate.R;
+import com.example.hasee.uqdate.util.FileTypeUtil;
 
 import java.io.File;
 
@@ -21,6 +23,7 @@ import java.io.File;
 */
 public class UploadPager extends BasePager {
     Button btn_upload;
+    TextView tv_1,tv_2;
     Intent intent = null;
     public UploadPager(Context context) {
         super(context);
@@ -35,17 +38,33 @@ public class UploadPager extends BasePager {
     public void initViews() {
         initData(null);
         btn_upload = mRootView.findViewById(R.id.btn_upload);
+        tv_1 = mRootView.findViewById(R.id.textView2);
+        tv_2 = mRootView.findViewById(R.id.textView3);
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getIntentFileURL();
-
+                tv_1.setText(getIntentFileURL());
+                //对非文件或空对象进行异常捕获
+                try {
+                    tv_2.setText(FileTypeUtil.getFileType(getIntentFileURL()));
+                } catch (Exception e) {
+                    tv_2.setText("传入的文件名不正确或为空");
+                }
             }
         });
     }
 
+    /**
+    * 在这里我们对每次载入传进来的数据进行处理
+    * @author      Wnliam
+    * @return
+    * @exception
+    * @date        2019/1/23 14:42
+    */
     @Override
     public void initData(Object data) {
+        //进行为空判断，避免空指针
+        if (null != data)
         intent = (Intent)data;
     }
 
@@ -68,13 +87,6 @@ public class UploadPager extends BasePager {
             System.out.println(type);
         }
         return str;
-    }
-
-    private String getTypeFactory(){
-        String type = intent.getType();
-        if (type.equals(""))
-            return "";
-        else return "";
     }
 }
 

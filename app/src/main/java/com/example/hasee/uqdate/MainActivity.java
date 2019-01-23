@@ -94,10 +94,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         Log.i("", "----onPageSelected----position = " + position);
         int resld = radioGroup.getChildAt(position).getId();
         radioGroup.check(resld);
-        //下面的方法也可以
-//        radioButtons[position].setChecked(true);
-
-        pagers.get(position).initData(null);
+        //对接收Intent进行限定
+//        if(position == 0)
+//            pagers.get(position).initData(getIntent());
+//        else
+            pagers.get(position).initData(null);
     }
 
     @Override

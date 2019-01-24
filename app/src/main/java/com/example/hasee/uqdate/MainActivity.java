@@ -4,8 +4,10 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.hasee.uqdate.adapter.MainPagerAdapter;
 import com.example.hasee.uqdate.pager.BasePager;
@@ -25,6 +27,8 @@ import java.util.List;
 * @Version:        1.0
 */
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
+    // 用来计算返回键的点击间隔时间
+    private long exitTime = 0;
     RadioGroup radioGroup;
     ViewPager vp;
     RadioButton rbtn_uplod,rbtn_file,rbtn_setting;
@@ -103,10 +107,45 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     public void onPageScrollStateChanged(int state) {
 
     }
+
+
+
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        pagers.get(0).initData(getIntent());
+//    }
     //2019/1/24新增：当MainActivity重新调起时，将Pager定位到UploadPager并重传入Intent
     @Override
     protected void onRestart() {
         super.onRestart();
         pagers.get(0).initData(getIntent());
     }
+
+
+
+    /**
+    * 重写返回键实现按两次推出程序
+    * @author      Wnliam
+    * @return      boolean
+    * @exception
+    * @date        2019/1/24 14:44
+    */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                //弹出提示，可以有多种方式
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                finish();
+            }
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
 }

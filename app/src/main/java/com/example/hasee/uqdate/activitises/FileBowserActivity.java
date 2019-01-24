@@ -2,8 +2,11 @@ package com.example.hasee.uqdate.activitises;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -23,12 +26,15 @@ import java.util.List;
 import java.util.Map;
 
 public class FileBowserActivity extends AppCompatActivity {
+    //用来计算返回键间隔时间
+    private long exitTime = 0;
     TextView textView;
     ListView listView;
     Button button;
     //父文件夹路径
     File crrentParent;
     File[] crrentParentFiles;
+    String rooturl = Environment.getExternalStorageDirectory().getPath();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,11 +43,14 @@ public class FileBowserActivity extends AppCompatActivity {
         listView = findViewById(R.id.list_bowser);
         button = findViewById(R.id.btn_bowser);
         //获取sd卡目录
-        File root = new File("storage/emulated/0");
+//        File root = new File("storage/emulated/0");
+        File root = new File(rooturl);
         if(root.exists()){
             crrentParent = root;
             crrentParentFiles = root.listFiles();
             infiltListView(crrentParentFiles);
+
+
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -51,9 +60,9 @@ public class FileBowserActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
 //                        return;
-                    }
+                    }else {
                     File[] tmp = crrentParentFiles[i].listFiles();
-                    if(tmp==null/* || tmp.length==0*/){
+                    if(tmp==null || tmp.length==0){
                         Toast.makeText(FileBowserActivity.this, "当前目录不可访问或该路径下没有文件", Toast.LENGTH_SHORT).show();
                     }else{
                         //获取单击列表项对应的文件夹，设为当前的付文件夹
@@ -64,14 +73,19 @@ public class FileBowserActivity extends AppCompatActivity {
                         infiltListView(crrentParentFiles);
 
                     }
-                }
+                } }
             });
             //获取上一级目录的按钮
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    String crrentParentCanonicalPath ="";
                     try {
-                        if(!crrentParent.getCanonicalPath().equals("storage/emulated/0")){
+                        crrentParentCanonicalPath= crrentParent.getCanonicalPath();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(!crrentParentCanonicalPath.equals(rooturl)){
                             //获取上一级目录
                             crrentParent = crrentParent.getParentFile();
                             //列出当前目录所有文件
@@ -80,12 +94,19 @@ public class FileBowserActivity extends AppCompatActivity {
                             infiltListView(crrentParentFiles);
                         }
                         else{
+
+//                            finish();
+                        if ((System.currentTimeMillis() - exitTime) > 2000) {
+                            //弹出提示，可以有多种方式
+                            Toast.makeText(FileBowserActivity.this, "已到达sd卡根目录，" +
+                                    "再按一次推出", Toast.LENGTH_SHORT).show();
+                            exitTime = System.currentTimeMillis();
+                        } else {
                             finish();
                         }
 
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        }
+
                 }
             });
         }else {
@@ -116,5 +137,29 @@ public class FileBowserActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode==KeyEvent.KEYCODE_BACK){
+            String crrentParentCanonicalPath ="";
+            try {
+                crrentParentCanonicalPath= crrentParent.getCanonicalPath();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if(!crrentParentCanonicalPath.equals(rooturl)){
+                    //获取上一级目录
+                    crrentParent = crrentParent.getParentFile();
+                    //列出当前目录所有文件
+                    crrentParentFiles = crrentParent.listFiles();
+                    //更新listview
+                    infiltListView(crrentParentFiles);
+                return true;
+            }
+
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

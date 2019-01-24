@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         vp.setOnPageChangeListener(this);
         radioGroup.setOnCheckedChangeListener(this);
         initPager(vp);
-//        radioButtons = new RadioButton[]{news, video, live, radio, mine};
-        //设置默认展示页
         rbtn_uplod.setChecked(true);
     }
 
@@ -104,5 +102,11 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     @Override
     public void onPageScrollStateChanged(int state) {
 
+    }
+    //2019/1/24新增：当MainActivity重新调起时，将Pager定位到UploadPager并重传入Intent
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        pagers.get(0).initData(getIntent());
     }
 }

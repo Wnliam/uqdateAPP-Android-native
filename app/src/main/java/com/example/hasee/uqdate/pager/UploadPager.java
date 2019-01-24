@@ -7,7 +7,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
+import com.example.hasee.uqdate.activitises.FileBowserActivity;
 import com.example.hasee.uqdate.util.FileTypeUtil;
 
 import java.io.File;
@@ -22,9 +24,9 @@ import java.io.File;
 * @Version:        1.0
 */
 public class UploadPager extends BasePager {
-    Button btn_upload;
+    Button btn_upload,button_tobowser;
     TextView tv_1,tv_2;
-    Intent intent = null;
+    Intent globalIntent = null;
     public UploadPager(Context context) {
         super(context);
     }
@@ -38,8 +40,10 @@ public class UploadPager extends BasePager {
     public void initViews() {
         initData(null);
         btn_upload = mRootView.findViewById(R.id.btn_upload);
+        button_tobowser = mRootView.findViewById(R.id.btn_tobowser);
         tv_1 = mRootView.findViewById(R.id.textView2);
         tv_2 = mRootView.findViewById(R.id.textView3);
+
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,6 +54,14 @@ public class UploadPager extends BasePager {
                 } catch (Exception e) {
                     tv_2.setText("传入的文件名不正确或为空");
                 }
+            }
+        });
+
+        button_tobowser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext,FileBowserActivity.class);
+                mContext.startActivity(intent);
             }
         });
     }
@@ -65,7 +77,7 @@ public class UploadPager extends BasePager {
     public void initData(Object data) {
         //进行为空判断，避免空指针
         if (null != data)
-        intent = (Intent)data;
+        globalIntent = (Intent)data;
     }
 
 
@@ -78,13 +90,16 @@ public class UploadPager extends BasePager {
     */
     private String getIntentFileURL(){
         String str = "";
-        String action = intent.getAction();
-        String type = intent.getType();
-        if (intent.ACTION_VIEW.equals(action)) {
-            Uri uri = intent.getData();
+        String action = globalIntent.getAction();
+        String type = globalIntent.getType();
+        if (globalIntent.ACTION_VIEW.equals(action)) {
+            Uri uri = globalIntent.getData();
             str = Uri.decode(uri.getEncodedPath());
             System.out.println(str);
             System.out.println(type);
+        }else {//2019/1/24：这里处理从本地文件选择中选择的文件
+            if(null != globalIntent.getStringExtra("localFileURL"));
+            str =  globalIntent.getStringExtra("localFileURL");
         }
         return str;
     }

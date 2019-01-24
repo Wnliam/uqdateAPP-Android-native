@@ -31,8 +31,8 @@ public class FileBowserActivity extends BaseActivity {
     ListView listView;
     Button button;
     //父文件夹路径
-    File crrentParent;
-    File[] crrentParentFiles;
+    File crrentParent = null;
+    File[] crrentParentFiles = null;
     String rooturl = Environment.getExternalStorageDirectory().getPath();
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,26 +54,27 @@ public class FileBowserActivity extends BaseActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    if(crrentParentFiles[i].isFile()){//当点击的是文件时
-                        Intent intent = new Intent(FileBowserActivity.this,MainActivity.class);
+                    if (crrentParentFiles[i].isFile()) {//当点击的是文件时
+                        Intent intent = new Intent(FileBowserActivity.this, MainActivity.class);
                         intent.putExtra("localFileURL", crrentParentFiles[i].getAbsolutePath());
                         startActivity(intent);
                         finish();
 //                        return;
-                    }else {
-                    File[] tmp = crrentParentFiles[i].listFiles();
-                    if(tmp==null || tmp.length==0){
-                        Toast.makeText(FileBowserActivity.this, "当前目录不可访问或该路径下没有文件", Toast.LENGTH_SHORT).show();
-                    }else{
-                        //获取单击列表项对应的文件夹，设为当前的付文件夹
-                        crrentParent = crrentParentFiles[i];
-                        //保存当前付文件夹内的全部文件和文件夹
-                        crrentParentFiles = tmp;
-                        //再次更新listview
-                        infiltListView(crrentParentFiles);
+                    } else {
+                        File[] tmp = crrentParentFiles[i].listFiles();
+                        if (tmp == null || tmp.length == 0) {
+                            Toast.makeText(FileBowserActivity.this, "当前目录不可访问或该路径下没有文件", Toast.LENGTH_SHORT).show();
+                        } else {
+                            //获取单击列表项对应的文件夹，设为当前的付文件夹
+                            crrentParent = crrentParentFiles[i];
+                            //保存当前付文件夹内的全部文件和文件夹
+                            crrentParentFiles = tmp;
+                            //再次更新listview
+                            infiltListView(crrentParentFiles);
 
+                        }
                     }
-                } }
+                }
             });
             //获取上一级目录的按钮
             button.setOnClickListener(new View.OnClickListener() {
@@ -102,7 +103,7 @@ public class FileBowserActivity extends BaseActivity {
                                     "再按一次退出", Toast.LENGTH_SHORT).show();
                             exitTime = System.currentTimeMillis();
                         } else {
-                            finish();
+                            gotoMainActivity();
                         }
 
                         }
@@ -157,9 +158,16 @@ public class FileBowserActivity extends BaseActivity {
                     //更新listview
                     infiltListView(crrentParentFiles);
                 return true;
-            }
+            }else
+                gotoMainActivity();
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+//2019/1/24增加返回主UI的方法
+    private void gotoMainActivity(){
+        Intent intent = new Intent(FileBowserActivity.this,MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

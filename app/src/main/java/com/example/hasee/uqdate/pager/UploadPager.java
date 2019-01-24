@@ -1,5 +1,6 @@
 package com.example.hasee.uqdate.pager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -62,6 +63,9 @@ public class UploadPager extends BasePager {
             public void onClick(View v) {
                 Intent intent = new Intent(mContext,FileBowserActivity.class);
                 mContext.startActivity(intent);
+                //增加跳转后结束本次UI的指令
+                Activity m = (Activity)mContext;
+                m.finish();
             }
         });
     }

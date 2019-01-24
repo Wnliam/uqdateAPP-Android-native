@@ -110,21 +110,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        pagers.get(0).initData(getIntent());
-//    }
-    //2019/1/24新增：当MainActivity重新调起时，将Pager定位到UploadPager并重传入Intent
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        pagers.get(0).initData(getIntent());
-    }
-
-
+//2019/1/24优化携带参数方式，不使用重写onRestart方法加载参数，而是在每次跳转时销毁并在下次进入时重新加载
 
     /**
     * 重写返回键实现按两次推出程序

@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
+import com.example.hasee.uqdate.activitises.BaseActivity;
 import com.example.hasee.uqdate.adapter.GuidePagerAdapter;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
@@ -30,7 +31,7 @@ import java.util.List;
 * @UpdateRemark:   修改内容
 * @Version:        1.0
 */
-public class GuideActivity extends AppCompatActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
+public class GuideActivity extends BaseActivity implements View.OnClickListener, ViewPager.OnPageChangeListener {
     private final static String TAG = "GuideActivity";
     ViewPager viewPager;
     private ImageView[] dotViews;//小圆点
@@ -44,7 +45,7 @@ public class GuideActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guide);
-
+        setBarSetting(this);
 //        findViewById(R.id.btn_start_guide_a).setOnClickListener(this);
         llPoint = findViewById(R.id.ll_point_guide);
         point = findViewById(R.id.iv_point_blue_guide);

@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -25,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class FileBowserActivity extends AppCompatActivity {
+public class FileBowserActivity extends BaseActivity {
     //用来计算返回键间隔时间
     private long exitTime = 0;
     TextView textView;
@@ -39,6 +38,7 @@ public class FileBowserActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browser_layout);
+        setBarSetting(this);
         textView = findViewById(R.id.text_path);
         listView = findViewById(R.id.list_bowser);
         button = findViewById(R.id.btn_bowser);
@@ -99,7 +99,7 @@ public class FileBowserActivity extends AppCompatActivity {
                         if ((System.currentTimeMillis() - exitTime) > 2000) {
                             //弹出提示，可以有多种方式
                             Toast.makeText(FileBowserActivity.this, "已到达sd卡根目录，" +
-                                    "再按一次推出", Toast.LENGTH_SHORT).show();
+                                    "再按一次退出", Toast.LENGTH_SHORT).show();
                             exitTime = System.currentTimeMillis();
                         } else {
                             finish();

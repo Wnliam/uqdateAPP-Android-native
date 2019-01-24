@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.hasee.uqdate.activitises.BaseActivity;
 import com.example.hasee.uqdate.adapter.MainPagerAdapter;
 import com.example.hasee.uqdate.pager.BasePager;
 import com.example.hasee.uqdate.pager.FilePager;
@@ -26,7 +27,7 @@ import java.util.List;
 * @UpdateRemark:   修改内容
 * @Version:        1.0
 */
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
     // 用来计算返回键的点击间隔时间
     private long exitTime = 0;
     RadioGroup radioGroup;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setBarSetting(this);
         radioGroup = findViewById(R.id.radioGroup_main);
         rbtn_uplod = findViewById(R.id.radio_upload);
         rbtn_file = findViewById(R.id.radio_files);

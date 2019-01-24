@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
+import com.example.hasee.uqdate.activitises.BaseActivity;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
 /**
@@ -22,7 +23,7 @@ import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 * @UpdateRemark:   修改内容
 * @Version:        1.0
 */
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
     //延时三秒后跳转到引导页
     private static final int Delayed = 3000;
     private static final int TO_GUIDE = 1010;
@@ -31,12 +32,8 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);// 隐藏标题
-
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);// 设置全屏
         setContentView(R.layout.activity_splash);
+        setBarSetting(this);
         imageView = findViewById(R.id.iv_splash);
 
 //        Picasso.with(getApplicationContext()).load(URL).into(imageView);

@@ -11,7 +11,9 @@ import android.widget.TextView;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.activitises.FileBowserActivity;
+import com.example.hasee.uqdate.util.ClientUploadUtils;
 import com.example.hasee.uqdate.util.FileTypeUtil;
+import com.example.hasee.uqdate.util.URLConfigUtil;
 
 import java.io.File;
 
@@ -55,6 +57,17 @@ public class UploadPager extends BasePager {
                 } catch (Exception e) {
                     tv_2.setText("传入的文件名不正确或为空");
                 }
+                //2019/1/28
+
+                try {
+                    ClientUploadUtils.upload(URLConfigUtil.getServerURL(mContext)+"/file",
+                            getIntentFileURL(), new File(getIntentFileURL()).getName());
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                }
+
+                //2019/1/28
             }
         });
 

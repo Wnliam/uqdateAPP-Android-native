@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,6 +23,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+* @Description:    这个类是获取本地文件的UI
+* @Author:         Wnliam
+* @CreateDate:     2019/1/28 11:13
+* @UpdateUser:     Wnliam
+* @UpdateDate:     2019/1/28 11:13
+* @UpdateRemark:   修改内容
+* @Version:        1.0
+*/
 public class FileBowserActivity extends BaseActivity {
     //用来计算返回键间隔时间
     private long exitTime = 0;
@@ -45,9 +53,12 @@ public class FileBowserActivity extends BaseActivity {
         //获取sd卡目录
 //        File root = new File("storage/emulated/0");
         File root = new File(rooturl);
+        System.out.println("rootURL:"+rooturl);
         if(root.exists()){
             crrentParent = root;
+            System.out.println("root:"+root.getAbsoluteFile());
             crrentParentFiles = root.listFiles();
+            System.out.println("crrentParentFiles:"+crrentParentFiles);
             infiltListView(crrentParentFiles);
 
 
@@ -117,9 +128,21 @@ public class FileBowserActivity extends BaseActivity {
 
 
 
-
+    /**
+    * 加载本地文件视图的方法
+    * @author      Wnliam
+    * @return
+    * @exception
+    * @date        2019/1/28 15:12
+    */
     private void infiltListView(File[] files){
         List<Map<String,Object>> listItems= new ArrayList<Map<String,Object>>();
+        //Android7.0后除了安装时授权，还需要手动授权或动态获取权限
+        if(null == files) {
+            Toast.makeText(FileBowserActivity.this, "您没有打开文件的权限，" +
+                    "请到设置/应用设置/权限中打开文件读写权限", Toast.LENGTH_SHORT).show();
+            return;
+        }
         for(int i=0;i<files.length;i++){
             Map<String,Object> listItem = new HashMap<String, Object>();
             if(files[i].isDirectory()){

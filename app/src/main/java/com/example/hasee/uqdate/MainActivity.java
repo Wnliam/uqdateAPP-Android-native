@@ -1,5 +1,6 @@
 package com.example.hasee.uqdate;
 
+import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -136,4 +137,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         return super.onKeyDown(keyCode, event);
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        pagers.get(0).initData(getIntent());
+    }
 }

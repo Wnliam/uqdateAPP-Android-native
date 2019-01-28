@@ -20,6 +20,7 @@ public class URLConfigUtil {
         server = properties.getProperty("server");
         port = properties.getProperty("port");
         serverURL = server + ":" +port;
+        System.out.println(serverURL);
         return serverURL;
     }
 

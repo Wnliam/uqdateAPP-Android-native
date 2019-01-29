@@ -34,4 +34,22 @@ public class ClientUploadUtils {
 
         return response.body();
     }
+
+    public static void upload(String url, String filePath, String fileName,Callback callback){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", fileName,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), new File(filePath)))
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", "Client-ID " + UUID.randomUUID())
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+        return;
+    }
 }

@@ -19,7 +19,7 @@ public class URLConfigUtil {
         properties.load(inputStream);
         server = properties.getProperty("server");
         port = properties.getProperty("port");
-        serverURL = server + ":" +port;
+        serverURL = "http://" + server + ":" +port;
         System.out.println(serverURL);
         return serverURL;
     }

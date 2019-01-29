@@ -16,6 +16,11 @@ import com.example.hasee.uqdate.util.FileTypeUtil;
 import com.example.hasee.uqdate.util.URLConfigUtil;
 
 import java.io.File;
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
 * @Description:    用于实现文件上传的功能
@@ -56,18 +61,37 @@ public class UploadPager extends BasePager {
                     tv_2.setText(FileTypeUtil.getFileType(getIntentFileURL()));
                 } catch (Exception e) {
                     tv_2.setText("传入的文件名不正确或为空");
+                    return;
                 }
+                //2019/1/28 同步调用出现主线程占用问题
+//                try {
+//                    ClientUploadUtils.upload(URLConfigUtil.getServerURL(mContext)+"/file",
+//                            getIntentFileURL(), new File(getIntentFileURL()).getName());
+//                } catch (Exception e) {
+//
+//                    e.printStackTrace();
+//                }
                 //2019/1/28
-
+                //2019/1/29尝试异步调用
+                String url = "";
                 try {
-                    ClientUploadUtils.upload(URLConfigUtil.getServerURL(mContext)+"/file",
-                            getIntentFileURL(), new File(getIntentFileURL()).getName());
-                } catch (Exception e) {
-
+                    url = URLConfigUtil.getServerURL(mContext);
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
+                ClientUploadUtils.upload(url + "/file", getIntentFileURL(),
+                        new File(getIntentFileURL()).getName(), new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+                                tv_2.setText("上传失败");
+                            }
 
-                //2019/1/28
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                tv_2.setText("上传成功");
+                            }
+                        });
+                //2019/1/29
             }
         });
 

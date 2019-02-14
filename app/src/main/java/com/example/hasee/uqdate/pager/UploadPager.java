@@ -89,6 +89,7 @@ public class UploadPager extends BasePager {
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
                                 tv_2.setText("上传成功");
+                                response.body().close();
                             }
                         });
                 //2019/1/29
@@ -116,8 +117,7 @@ public class UploadPager extends BasePager {
     */
     @Override
     public void initData(Object data) {
-        //进行为空判断，避免空指针
-        if (null != data)
+        if (null != data)            //进行为空判断，避免空指针
         globalIntent = (Intent)data;
     }
 

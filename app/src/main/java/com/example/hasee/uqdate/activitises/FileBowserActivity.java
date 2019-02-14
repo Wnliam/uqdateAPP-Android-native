@@ -139,6 +139,7 @@ public class FileBowserActivity extends BaseActivity {
         List<Map<String,Object>> listItems= new ArrayList<Map<String,Object>>();
         //Android7.0后除了安装时授权，还需要手动授权或动态获取权限
         if(null == files) {
+            //手动授权的提示
             Toast.makeText(FileBowserActivity.this, "您没有打开文件的权限，" +
                     "请到设置/应用设置/权限中打开文件读写权限", Toast.LENGTH_SHORT).show();
             return;

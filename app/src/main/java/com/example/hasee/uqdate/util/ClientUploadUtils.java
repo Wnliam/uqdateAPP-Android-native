@@ -6,7 +6,7 @@ import java.util.UUID;
 import okhttp3.*;
 
 /**
-* @Description:    上传文件的工具类
+* @Description:    上传文件的工具类（同步实现）
 * @Author:         Wnliam
 * @CreateDate:     2019/1/28 14:08
 * @UpdateUser:     Wnliam
@@ -34,7 +34,13 @@ public class ClientUploadUtils {
 
         return response.body();
     }
-
+    /**
+    * 异步实现上传
+    * @author      Wnliam
+    * @return
+    * @exception
+    * @date        2019/2/14 10:25
+    */
     public static void upload(String url, String filePath, String fileName,Callback callback){
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()

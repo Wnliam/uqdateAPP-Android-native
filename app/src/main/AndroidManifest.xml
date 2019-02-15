@@ -11,12 +11,13 @@
         android:roundIcon="@drawable/uqdate"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".forstart.SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".activitises.EasyPermissionsActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".MainActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -31,10 +32,14 @@
                 <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
+
         <activity android:name=".forstart.GuideActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
         <activity android:name=".activitises.FileBowserActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:launchMode="singleTask"/>
+
+        <activity android:name=".forstart.SplashActivity"  android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

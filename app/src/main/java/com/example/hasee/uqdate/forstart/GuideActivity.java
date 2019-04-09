@@ -17,6 +17,7 @@ import android.widget.RelativeLayout;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.activitises.BaseActivity;
+import com.example.hasee.uqdate.activitises.LoginActivity;
 import com.example.hasee.uqdate.adapter.GuidePagerAdapter;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
@@ -123,16 +124,29 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
 
         finish();
     }
+    private void gotoLoginActivity(){
+        Intent intent = new Intent(GuideActivity.this,LoginActivity.class);
+        startActivity(intent);
 
+        SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+        sph.open("first_run");
+        sph.putBoolean("is_first_run", true);
+
+        finish();
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_start_guide:
-                gotoMainActivity();
+                //gotoMainActivity();
+                //2019/4/9
+                gotoLoginActivity();
                 break;
             case R.id.btn_start_guide_a:
-                gotoMainActivity();
+                //gotoMainActivity();
+                //2019/4/9
+                gotoLoginActivity();
                 break;
         }
     }

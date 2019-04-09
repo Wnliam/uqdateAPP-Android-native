@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hasee.uqdate">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
@@ -11,7 +12,7 @@
         android:roundIcon="@drawable/uqdate"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activitises.EasyPermissionsActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".forstart.SplashActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +40,25 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:launchMode="singleTask"/>
 
-        <activity android:name=".forstart.SplashActivity"  android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".activitises.EasyPermissionsActivity"  android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name=".activitises.LoginActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+
+        <!--这里添加qq第三方登陆所需-->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="1108216764" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
 
 </manifest>

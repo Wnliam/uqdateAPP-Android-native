@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.util.StatusBarUtil;
+import com.tencent.tauth.Tencent;
 
 /**
 * @Description:    这个类用于状态栏的通用配置
@@ -37,4 +38,7 @@ public class BaseActivity extends AppCompatActivity {
             StatusBarUtil.setStatusBarColor(act,0x55000000);
         }
     }
+
+
+
 }

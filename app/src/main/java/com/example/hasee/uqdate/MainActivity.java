@@ -16,6 +16,7 @@ import com.example.hasee.uqdate.pager.BasePager;
 import com.example.hasee.uqdate.pager.FilePager;
 import com.example.hasee.uqdate.pager.SettingPager;
 import com.example.hasee.uqdate.pager.UploadPager;
+import com.tencent.tauth.Tencent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.activitises.BaseActivity;
+import com.example.hasee.uqdate.activitises.EasyPermissionsActivity;
+import com.example.hasee.uqdate.activitises.LoginActivity;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 
 /**
@@ -51,6 +53,19 @@ public class SplashActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+    //2019/4/9改动
+    private void gotoEasyPermissionsActivity(){
+        Intent intent = new Intent(SplashActivity.this,EasyPermissionsActivity.class);
+        startActivity(intent);
+        finish();
+    }
+    private void gotoLoginActivity(){
+        Intent intent = new Intent(SplashActivity.this,LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }//
+
+
     private void gotoMainActivity(){
         Intent intent = new Intent(SplashActivity.this,MainActivity.class);
         startActivity(intent);
@@ -71,10 +86,13 @@ public class SplashActivity extends BaseActivity {
                     boolean isFirstRan = sph.getBoolean("is_first_run");
                     if (!isFirstRan){
                         //跳转到引导页
-                        gotoGuideActivity();
+//                        gotoGuideActivity();
+                        //2019/4/9
+                        gotoEasyPermissionsActivity();
                     }else{
                         //跳转到主页
-                        gotoMainActivity();
+//                        gotoMainActivity();
+                        gotoLoginActivity();
                     }
                     break;
             }

@@ -59,6 +59,9 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activitises.FileServerActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:launchMode="singleTask"></activity>
     </application>
 
 </manifest>

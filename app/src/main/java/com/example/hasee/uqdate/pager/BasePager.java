@@ -1,5 +1,6 @@
 package com.example.hasee.uqdate.pager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,5 +112,15 @@ public abstract class BasePager {
         return mContext.getResources().getString(resId);
     }
 
-
+    /**
+    * 若传入对象为Activity可调用此方法获得Activity对象
+    * @author      Wnliam
+    * @return      Activity
+    * @exception
+    * @date        2019/5/4 16:38
+    */
+    public Activity getThisActivity(){
+//        if (null != mContext)
+        return (Activity) mContext;
+    }
 }

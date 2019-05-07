@@ -30,4 +30,6 @@ dependencies {
     implementation 'pub.devrel:easypermissions:1.2.0'
     //简化权限库
     implementation files('libs/open_sdk_r6008_lite.jar')
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
 }

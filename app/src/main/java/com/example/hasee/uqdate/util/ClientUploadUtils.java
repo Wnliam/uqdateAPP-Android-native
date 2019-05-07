@@ -58,4 +58,23 @@ public class ClientUploadUtils {
         client.newCall(request).enqueue(callback);
         return;
     }
+//2019/5/7新增openid
+    public static void upload(String url, String filePath, String fileName,Callback callback , String openID){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("file", fileName,
+                        RequestBody.create(MediaType.parse("multipart/form-data"), new File(filePath)))
+                .addFormDataPart("openid", openID)
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", "Client-ID " + UUID.randomUUID())
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        client.newCall(request).enqueue(callback);
+        return;
+    }
 }

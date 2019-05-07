@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.forstart.SplashActivity;
+import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 import com.tencent.connect.UserInfo;
 import com.tencent.connect.auth.QQToken;
 import com.tencent.connect.common.Constants;
@@ -31,12 +32,19 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         if (null == mTencent)
             mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
-//        else if (null != mTencent.getOpenId() && null != mTencent.getAccessToken()){
-//            System.out.println("__________________"+mTencent.getOpenId().toString() + mTencent.getAccessToken().toString());
-//            return;
-//        }else
-        if (mTencent.isSessionValid())
+
+        //根据本地内容进行判断2019/5/6
+        String qname = "";
+        SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+        sph.open("login_info");
+        qname = sph.getString("qname");
+        if (!"".equals(qname))
             gotoMainActivity();
+        //2019/5/6
+        //根据qqsession进行是否登陆的判断2019/4
+        else if (mTencent.isSessionValid())
+            gotoMainActivity();
+        //2019/4
     }
 
     public void buttonLogin(View v){
@@ -62,6 +70,11 @@ public class LoginActivity extends BaseActivity {
             JSONObject obj = (JSONObject) response;
             try {
                 String openID = obj.getString("openid");
+                //2019/5/6
+                SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+                sph.open("login_info");
+                sph.putString("openid", openID);
+                //2019/5/6
                 String accessToken = obj.getString("access_token");
                 String expires = obj.getString("expires_in");
                 mTencent.setOpenId(openID);
@@ -72,9 +85,27 @@ public class LoginActivity extends BaseActivity {
                     @Override
                     public void onComplete(Object response) {
                         Log.e("zzz","登录成功"+response.toString());
+
+                        //2019/5/6增加本地信息的存储
+                        JSONObject reinfo = (JSONObject)response;
+                        String qname = "";
+                        String qimg = "";
+                        try {
+                            qname = reinfo.getString("nickname");
+                            qimg = reinfo.getString("figureurl_2");
+                        } catch (JSONException e) {
+                            Log.e(TAG,"json解析出错");
+                            e.printStackTrace();
+                        }
+                        SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+                        sph.open("login_info");
+                        sph.putString("qname", qname);
+                        sph.putString("qimg", qimg);
+
+                        //2019/5/6
+
                         gotoMainActivity();
                     }
-
                     @Override
                     public void onError(UiError uiError) {
                         Log.e(TAG,"登录失败"+uiError.toString());
@@ -125,4 +156,5 @@ public class LoginActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
+
 }

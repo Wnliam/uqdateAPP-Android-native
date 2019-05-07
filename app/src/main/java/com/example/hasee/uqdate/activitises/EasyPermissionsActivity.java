@@ -32,7 +32,7 @@ public class EasyPermissionsActivity extends BaseActivity implements EasyPermiss
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+//        setContentView(R.layout.activity_splash);
         //检查权限，防止重复获取
         mPermissions = PermissionUtil.getDeniedPermissions(this, mPermissions);
         if (mPermissions.length > 0) {

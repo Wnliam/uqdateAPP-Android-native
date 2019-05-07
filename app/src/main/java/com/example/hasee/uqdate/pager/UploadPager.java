@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.activitises.FileBowserActivity;
+import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 import com.example.hasee.uqdate.util.ClientUploadUtils;
 import com.example.hasee.uqdate.util.FileTypeUtil;
 import com.example.hasee.uqdate.util.URLConfigUtil;
@@ -79,6 +80,10 @@ public class UploadPager extends BasePager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                //2019/5/7
+                SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+                sph.open("login_info");
+                String openID = sph.getString("openid");//
                 ClientUploadUtils.upload(url + "/file", getIntentFileURL(),
                         new File(getIntentFileURL()).getName(), new Callback() {
                             @Override
@@ -91,7 +96,7 @@ public class UploadPager extends BasePager {
                                 tv_2.setText("上传成功");
                                 response.body().close();
                             }
-                        });
+                        },openID);
                 //2019/1/29
             }
         });
@@ -102,6 +107,7 @@ public class UploadPager extends BasePager {
                 Intent intent = new Intent(mContext,FileBowserActivity.class);
                 mContext.startActivity(intent);
                 //增加跳转后结束本次UI的指令
+                // 2019/4/10更新：Main为栈内复用，所以不再注销主ui。
                 Activity m = (Activity)mContext;
                 m.finish();
             }

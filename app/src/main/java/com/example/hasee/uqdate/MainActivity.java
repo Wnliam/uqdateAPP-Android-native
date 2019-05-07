@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.hasee.uqdate.activitises.BaseActivity;
+import com.example.hasee.uqdate.activitises.LoginActivity;
 import com.example.hasee.uqdate.adapter.MainPagerAdapter;
 import com.example.hasee.uqdate.pager.BasePager;
 import com.example.hasee.uqdate.pager.FilePager;
@@ -38,6 +39,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     RadioButton [] radioButtons;
     private List<BasePager> pagers;
 
+    private static final String APP_ID = "1108216764";
+    private Tencent mTencent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +55,17 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         radioGroup.setOnCheckedChangeListener(this);
         initPager(vp);
         rbtn_uplod.setChecked(true);
+        //2019/4/10
+        if (null == mTencent)
+            mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
+        if (!mTencent.isSessionValid())
+            gotoLoginActivity();
+
+    }
+
+    private void gotoLoginActivity() {
+        Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+        startActivity(intent);
     }
 
     //向ViewPager中添加数据

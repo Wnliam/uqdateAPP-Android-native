@@ -16,9 +16,11 @@ import android.widget.Toast;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
+import com.example.hasee.uqdate.views.ActionSheetDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,11 +30,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @Description:    这个类是获取本地文件的UI
+* @Description:    这个类是获取远程文件信息的UI
 * @Author:         Wnliam
-* @CreateDate:     2019/1/28 11:13
+* @CreateDate:     2019/4/28 11:13
 * @UpdateUser:     Wnliam
-* @UpdateDate:     2019/1/28 11:13
+* @UpdateDate:     2019/5/8
 * @UpdateRemark:   修改内容
 * @Version:        1.0
 */
@@ -52,15 +54,15 @@ public class FileServerActivity extends BaseActivity {
         textView = findViewById(R.id.text_path);
         listView = findViewById(R.id.list_bowser);
         button = findViewById(R.id.btn_bowser);
-        //获取sd卡目录
-//        File root = new File("storage/emulated/0");
+
+        textView.setText("云端文件：");
         SharePrefrenceHelper sph = new SharePrefrenceHelper(this.getApplicationContext());
         sph.open("file_pager");
         files = sph.getString("file_array");
 
         try {
             jsonArray = new JSONArray(files);
-            infiltListView(jsonArray);
+//            infiltListView(jsonArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -69,9 +71,36 @@ public class FileServerActivity extends BaseActivity {
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-
+                public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                    //这里是弹出菜单的业务逻辑
+                    String jfile = null;
+                    try {
+                        jfile = jsonArray.getJSONObject(i).getString("name");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    new ActionSheetDialog(FileServerActivity.this)
+                            .builder()
+                            .setTitle("请选择你对 "+ jfile +" 的操作：")
+                            .setCancelable(true)
+                            .setCanceledOnTouchOutside(true)
+                            .addSheetItem("下载", ActionSheetDialog.SheetItemColor.Blue,
+                                    new ActionSheetDialog.OnSheetItemClickListener() {
+                                @Override
+                                public void onClick(int which) {
+                                    Toast.makeText(FileServerActivity.this,
+                                            "下载中", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addSheetItem("删除", ActionSheetDialog.SheetItemColor.Red,
+                                    new ActionSheetDialog.OnSheetItemClickListener() {
+                                        @Override
+                                        public void onClick(int which) {
+                                            removeFile(i);
+                                            Toast.makeText(FileServerActivity.this,
+                                                    "删除成功", Toast.LENGTH_SHORT).show();
+                                        }
+                            }).show();
 
 
                 }
@@ -83,8 +112,8 @@ public class FileServerActivity extends BaseActivity {
 
                         if ((System.currentTimeMillis() - exitTime) > 2000) {
                             //弹出提示，可以有多种方式
-                            Toast.makeText(FileServerActivity.this, "已到达sd卡根目录，" +
-                                    "再按一次退出", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(FileServerActivity.this,
+                                    "再按一次退出云端浏览", Toast.LENGTH_SHORT).show();
                             exitTime = System.currentTimeMillis();
                         } else {
                             gotoMainActivity();
@@ -97,7 +126,15 @@ public class FileServerActivity extends BaseActivity {
 
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            infiltListView(jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
     * 加载本地文件视图的方法
@@ -108,11 +145,8 @@ public class FileServerActivity extends BaseActivity {
     */
     private void infiltListView(JSONArray files) throws JSONException {
         List<Map<String,Object>> listItems= new ArrayList<Map<String,Object>>();
-        //Android7.0后除了安装时授权，还需要手动授权或动态获取权限
         if(null == files) {
-            //手动授权的提示
-            Toast.makeText(FileServerActivity.this, "您没有打开文件的权限，" +
-                    "请到设置/应用设置/权限中打开文件读写权限", Toast.LENGTH_SHORT).show();
+            Toast.makeText(FileServerActivity.this, "未加载到文件", Toast.LENGTH_SHORT).show();
             return;
         }
         for(int i=0;i<files.length();i++){
@@ -128,10 +162,16 @@ public class FileServerActivity extends BaseActivity {
     }
 
 
-//2019/1/24增加返回主UI的方法
+//返回主UI的方法
     private void gotoMainActivity(){
         Intent intent = new Intent(FileServerActivity.this,MainActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    //删除file元素的方法
+    private void removeFile(int i){
+        jsonArray.remove(i);
+        onResume();
     }
 }

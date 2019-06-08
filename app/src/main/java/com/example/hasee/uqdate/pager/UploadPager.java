@@ -3,10 +3,13 @@ package com.example.hasee.uqdate.pager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.Telephony;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
@@ -33,9 +36,10 @@ import okhttp3.Response;
 * @Version:        1.0
 */
 public class UploadPager extends BasePager {
-    Button btn_upload,button_tobowser;
-    TextView tv_1,tv_2;
-    Intent globalIntent = null;
+    private Button btn_upload,button_tobowser;
+    private TextView tv_1,tv_2,tv_3;
+    private Intent globalIntent = null;
+    private String reInfo = "";
     public UploadPager(Context context) {
         super(context);
     }
@@ -52,16 +56,18 @@ public class UploadPager extends BasePager {
         button_tobowser = mRootView.findViewById(R.id.btn_tobowser);
         tv_1 = mRootView.findViewById(R.id.textView2);
         tv_2 = mRootView.findViewById(R.id.textView3);
-
+        tv_3 = mRootView.findViewById(R.id.textView3);
         btn_upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_1.setText(getIntentFileURL());
+                if (null != getIntentFileURL())
+                tv_1.setText(new File(getIntentFileURL()).getName());
+                System.out.println(getIntentFileURL());
                 //对非文件或空对象进行异常捕获
                 try {
-                    tv_2.setText(FileTypeUtil.getFileType(getIntentFileURL()));
+                    tv_2.setText("文件类型为："+FileTypeUtil.getFileType(getIntentFileURL()));
                 } catch (Exception e) {
-                    tv_2.setText("传入的文件名不正确或为空");
+                    tv_2.setText("上传的文件名不正确或为空");
                     return;
                 }
                 //2019/1/28 同步调用出现主线程占用问题
@@ -84,20 +90,25 @@ public class UploadPager extends BasePager {
                 SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
                 sph.open("login_info");
                 String openID = sph.getString("openid");//
-                ClientUploadUtils.upload(url + "/file", getIntentFileURL(),
+                ClientUploadUtils.upload(url + "/file", new File(getIntentFileURL()).getAbsolutePath(),
                         new File(getIntentFileURL()).getName(), new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                tv_2.setText("上传失败");
+                                onReturnSetText("上传失败");
                             }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                tv_2.setText("上传成功");
+                                onReturnSetText("上传成功");
                                 response.body().close();
                             }
                         },openID);
                 //2019/1/29
+
+
+
+
+
             }
         });
 
@@ -114,6 +125,16 @@ public class UploadPager extends BasePager {
         });
     }
 
+    private void onReturnSetText(final String info) {
+//        reInfo = info;
+        getThisActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tv_2.setText(info);
+            }
+        });
+    }
+
     /**
     * 在这里我们对每次载入传进来的数据进行处理
     * @author      Wnliam
@@ -124,7 +145,11 @@ public class UploadPager extends BasePager {
     @Override
     public void initData(Object data) {
         if (null != data)            //进行为空判断，避免空指针
-        globalIntent = (Intent)data;
+        {
+            globalIntent = (Intent)data;
+            if (null != getIntentFileURL())
+            tv_1.setText(new File(getIntentFileURL()).getName());
+        }
     }
 
 
@@ -148,7 +173,18 @@ public class UploadPager extends BasePager {
             if(null != globalIntent.getStringExtra("localFileURL"));
             str =  globalIntent.getStringExtra("localFileURL");
         }
+        str = formatUrl(str);
         return str;
+    }
+    private String formatUrl(String str){
+        if ("".equals(str) || null==str) return str;
+        String str1 = "";
+        if (str.indexOf("storage")<0)
+            str1 = str;
+            else{
+            str1 = str.substring(str.indexOf("storage"));
+        }
+        return str1;
     }
 }
 

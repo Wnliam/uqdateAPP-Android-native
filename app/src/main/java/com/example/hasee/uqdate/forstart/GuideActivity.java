@@ -41,7 +41,7 @@ public class GuideActivity extends BaseActivity implements View.OnClickListener,
     private int mPointWidth;
     private int mHeight;
     //引导页视图的图片
-    private int[] images= new int[]{R.drawable.loan_intro_1_loan,R.drawable.loan_intro_2_loan,R.drawable.loan_intro_3_loan};
+    private int[] images= new int[]{R.drawable.loan_intro_1_loan,R.drawable.loan_intro_2_loan,R.drawable.loan_intro_3_loan,R.drawable.loan_intro_4_loan};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

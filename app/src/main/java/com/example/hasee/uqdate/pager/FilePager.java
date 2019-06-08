@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -53,14 +54,15 @@ public class FilePager extends BasePager{
     private GridView gv_file;
     private Button btn_file_search;
     private FileCategoryAdapter mAdapter;
-
+    private EditText ed_file_search;
     private String openID = "";
-
+    public static final String Tag = "FilePager";
     public FilePager(Context context) {
         super(context);
         SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
         sph.open("login_info");
         openID = sph.getString("openid");
+
     }
 
     @Override
@@ -70,9 +72,10 @@ public class FilePager extends BasePager{
 
     @Override
     public void initViews() {
+
         gv_file = mRootView.findViewById(R.id.grid_file_category);
         btn_file_search = mRootView.findViewById(R.id.btn_file_search);
-
+        ed_file_search = mRootView.findViewById(R.id.et_file_search);
         ArrayList<FileCategoryBean> fileCategoryBeans = new ArrayList<>();
         Log.e("aaab",fileCategoryBeans.toString()+ "a"+falgs);
         fileCategoryBeans.addAll(getFileCategorys(categorys, falgs, imgs));
@@ -97,7 +100,7 @@ public class FilePager extends BasePager{
                 ClientFileUtils.okPost(url, openID, flag, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        Toast.makeText(mContext, "网络连接错误", Toast.LENGTH_SHORT).show();
+                        Log.e(Tag, e.toString());
                     }
 
                     @Override
@@ -116,10 +119,48 @@ public class FilePager extends BasePager{
             }
         });
 
+        btn_file_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String fileName = ed_file_search.getText().toString();
+                Log.e("searchfile", fileName);
+                if (!fileName.equals("")){
+                    String url = "";
+                    try {
+                        url = URLConfigUtil.getServerURL(mContext);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    url = url+"/searchfile";
+                    ClientFileUtils.okPostSearch(url, openID, fileName, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            Log.e(Tag, e.toString());
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            Intent intent = new Intent(mContext,FileServerActivity.class);
+                            String fileArray = response.body().string();
+                            Log.e("bbb",fileArray);
+                            SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+                            sph.open("file_pager");
+
+                            sph.putString("file_array", fileArray);
+                            mContext.startActivity(intent);
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
     @Override
     public void initData(Object data) {
+        SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+        sph.open("login_info");
+        openID = sph.getString("openid");
     }
 
     /**

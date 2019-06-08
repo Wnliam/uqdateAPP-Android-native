@@ -34,6 +34,9 @@ public class SettingPager extends BasePager {
     private Button btn_logout;
     private TextView tv_qname;
     private ImageView iv_img;
+    String qname = "";
+    String qimg = "";
+
     public SettingPager(Context context) {
         super(context);
     }
@@ -51,10 +54,12 @@ public class SettingPager extends BasePager {
         //2019/5/6
         tv_qname = mRootView.findViewById(R.id.tv_setting_name);
         iv_img = mRootView.findViewById(R.id.iv_setting_img);
+        //首次数据更新
         SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
         sph.open("login_info");
-        String qname = sph.getString("qname");
-        String qimg = sph.getString("qimg");
+        qname = sph.getString("qname");
+        qimg = sph.getString("qimg");
+        if(!"".equals(qimg))
         Picasso.with(mContext).load(qimg).into(iv_img);
         tv_qname.setText(qname);
         //2019/5/6
@@ -92,6 +97,14 @@ public class SettingPager extends BasePager {
 
     @Override
     public void initData(Object data) {
-
+        //每次重新加载时进行数据更新
+        SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+        sph.open("login_info");
+        qname = sph.getString("qname");
+        qimg = sph.getString("qimg");
+        //做非空判断
+        if(!"".equals(qimg))
+            Picasso.with(mContext).load(qimg).into(iv_img);
+        tv_qname.setText(qname);
     }
 }

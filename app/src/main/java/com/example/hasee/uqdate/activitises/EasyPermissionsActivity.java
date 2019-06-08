@@ -42,7 +42,12 @@ public class EasyPermissionsActivity extends BaseActivity implements EasyPermiss
              * 3.requestCode
              * 4.要申请的权限
              */
-            EasyPermissions.requestPermissions(this, PermissionUtil.permissionText(mPermissions), CODE, mPermissions);
+            try {
+                EasyPermissions.requestPermissions(this, PermissionUtil.permissionText(mPermissions), CODE, mPermissions);
+            }catch (Exception e){
+                //授权出错时直接进入主界面，进行手动授权
+                gotoGuideActivity();
+            }
             gotoGuideActivity();
         }else
             gotoGuideActivity();

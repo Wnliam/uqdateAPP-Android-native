@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.hasee.uqdate.activitises.BaseActivity;
 import com.example.hasee.uqdate.activitises.LoginActivity;
 import com.example.hasee.uqdate.adapter.MainPagerAdapter;
+import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
 import com.example.hasee.uqdate.pager.BasePager;
 import com.example.hasee.uqdate.pager.FilePager;
 import com.example.hasee.uqdate.pager.SettingPager;
@@ -33,10 +34,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener {
     // 用来计算返回键的点击间隔时间
     private long exitTime = 0;
-    RadioGroup radioGroup;
-    ViewPager vp;
-    RadioButton rbtn_uplod,rbtn_file,rbtn_setting;
-    RadioButton [] radioButtons;
+    private RadioGroup radioGroup;
+    private ViewPager vp;
+    private RadioButton rbtn_uplod,rbtn_file,rbtn_setting;
+    private RadioButton [] radioButtons;
     private List<BasePager> pagers;
 
     private static final String APP_ID = "1108216764";
@@ -58,7 +59,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         //2019/4/10
         if (null == mTencent)
             mTencent = Tencent.createInstance(APP_ID, this.getApplicationContext());
-        if (!mTencent.isSessionValid())
+        //
+        String qname = "";
+        SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+        sph.open("login_info");
+        qname = sph.getString("qname");
+        if ("".equals(qname))
+            gotoLoginActivity();
+        else if (!mTencent.isSessionValid())
             gotoLoginActivity();
 
     }
@@ -151,7 +159,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         return super.onKeyDown(keyCode, event);
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {

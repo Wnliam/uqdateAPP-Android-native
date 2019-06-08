@@ -12,15 +12,25 @@
         android:gravity="center_vertical|center_horizontal"
         android:orientation="horizontal">
 
+        <EditText
+            android:id="@+id/et_file_search"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_point_circle_inner_wihte"
+            android:ems="10"
+            android:drawableLeft="@drawable/ic_search"
+            android:hint="输入您要搜索的内容"
+            android:inputType="textPersonName" />
+
         <Button
             android:id="@+id/btn_file_search"
-            android:layout_width="match_parent"
+            android:layout_width="45dp"
             android:layout_height="35dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@drawable/shape_point_circle_inner_wihte"
-            android:drawableLeft="@drawable/ic_search"
             android:hint="搜索"
             android:inputType="phone"
             android:textSize="20sp" />

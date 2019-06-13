@@ -31,5 +31,7 @@ dependencies {
     //简化权限库
     implementation files('libs/open_sdk_r6008_lite.jar')
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'org.greenrobot:eventbus:3.1.1'//EventBus导包
+    implementation 'com.daimajia.numberprogressbar:library:1.4@aar'//好看的ProgressBar
 
 }

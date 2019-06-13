@@ -16,10 +16,11 @@
             android:id="@+id/et_file_search"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
+            android:layout_marginLeft="5dp"
             android:layout_weight="1"
             android:background="@drawable/shape_point_circle_inner_wihte"
-            android:ems="10"
             android:drawableLeft="@drawable/ic_search"
+            android:ems="10"
             android:hint="输入您要搜索的内容"
             android:inputType="textPersonName" />
 
@@ -44,6 +45,6 @@
         android:layout_marginTop="100dp"
         android:background="#ffffff"
         android:horizontalSpacing="10dp"
-        android:numColumns="2"
+        android:numColumns="3"
         android:verticalSpacing="10dp" />
 </RelativeLayout>

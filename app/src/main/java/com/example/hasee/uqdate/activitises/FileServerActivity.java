@@ -1,8 +1,11 @@
 package com.example.hasee.uqdate.activitises;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.View;
@@ -16,6 +19,9 @@ import android.widget.Toast;
 import com.example.hasee.uqdate.MainActivity;
 import com.example.hasee.uqdate.R;
 import com.example.hasee.uqdate.helper.SharePrefrenceHelper;
+import com.example.hasee.uqdate.util.ClientFileUtils;
+import com.example.hasee.uqdate.util.OKHttp.DownloadUtil;
+import com.example.hasee.uqdate.util.URLConfigUtil;
 import com.example.hasee.uqdate.views.ActionSheetDialog;
 
 import org.json.JSONArray;
@@ -28,6 +34,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 
 /**
 * @Description:    这个类是获取远程文件信息的UI
@@ -46,6 +57,8 @@ public class FileServerActivity extends BaseActivity {
     Button button;
     String files = "";
     JSONArray jsonArray = null;
+    String url = "";
+    String jfile = null;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,8 +85,15 @@ public class FileServerActivity extends BaseActivity {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, final int i, long l) {
+                    SharePrefrenceHelper sph = new SharePrefrenceHelper(getApplicationContext());
+                    sph.open("login_info");
+                    final String openID = sph.getString("openid");
+                    try {
+                        url = URLConfigUtil.getServerURL(FileServerActivity.this);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     //这里是弹出菜单的业务逻辑
-                    String jfile = null;
                     try {
                         jfile = jsonArray.getJSONObject(i).getString("name");
                     } catch (JSONException e) {
@@ -88,17 +108,67 @@ public class FileServerActivity extends BaseActivity {
                                     new ActionSheetDialog.OnSheetItemClickListener() {
                                 @Override
                                 public void onClick(int which) {
+                                    url = url + "/file/download";
                                     Toast.makeText(FileServerActivity.this,
                                             "下载中", Toast.LENGTH_SHORT).show();
+                                    downFile(url, openID, jfile);
+
                                 }
                             })
                             .addSheetItem("删除", ActionSheetDialog.SheetItemColor.Red,
                                     new ActionSheetDialog.OnSheetItemClickListener() {
                                         @Override
                                         public void onClick(int which) {
-                                            removeFile(i);
-                                            Toast.makeText(FileServerActivity.this,
-                                                    "删除成功", Toast.LENGTH_SHORT).show();
+                                            url = url + "/delete";
+//                                            String filename = null;
+//                                            try {
+//                                                filename = jsonArray.getJSONObject(i).getString("name");
+//                                            } catch (JSONException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                            ClientFileUtils.okHttpPost(url, openID, filename, new Callback() {
+//                                                @Override
+//                                                public void onFailure(Call call, IOException e) {
+//                                                    onReturnMessage("删除失败");
+//                                                }
+//
+//                                                @Override
+//                                                public void onResponse(Call call, Response response) throws IOException {
+//                                                    String resp = response.body().string();
+//                                                    onReturnMessage(resp);
+//                                                }
+//                                            });
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(FileServerActivity.this);
+                                            builder.setMessage("确定要删除"+jfile+"吗？")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            ClientFileUtils.okHttpPost(url, openID, jfile, new Callback() {
+                                                                @Override
+                                                                public void onFailure(Call call, IOException e) {
+                                                                    onReturnMessage("删除失败");
+                                                                }
+
+                                                                @Override
+                                                                public void onResponse(Call call, Response response) throws IOException {
+                                                                    String resp = response.body().string();
+                                                                    onReturnMessage(resp);
+                                                                }
+                                                            });
+                                                            //删除ui中的文件
+                                                            removeFile(i);
+                                                        }
+                                                    })
+                                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+                                            builder.show();
+//                                            //删除ui中的文件
+//                                            removeFile(i);
+//                                            Toast.makeText(FileServerActivity.this,
+//                                                    "删除成功", Toast.LENGTH_SHORT).show();
                                         }
                             }).show();
 
@@ -174,4 +244,46 @@ public class FileServerActivity extends BaseActivity {
         jsonArray.remove(i);
         onResume();
     }
+
+    private void onReturnMessage(final String info) {
+//        reInfo = info;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(FileServerActivity.this,
+                        info, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+//下载文件具体执行
+    /**
+     * 文件下载
+     */
+    private void downFile(String url,String openID,String destFileName) {
+        String savePath = Environment.getExternalStorageDirectory()+ File.separator + Environment.DIRECTORY_DOWNLOADS+ File.separator;
+        DownloadUtil.get().download(url,
+//                Environment.getExternalStorageDirectory().getAbsolutePath(),
+                savePath, openID, destFileName,
+                new DownloadUtil.OnDownloadListener() {
+                    @Override
+                    public void onDownloadSuccess(File file) {
+                        onReturnMessage(file.getName()+"下载成功");
+                    }
+
+                    @Override
+                    public void onDownloading(int progress) {
+                        onReturnMessage("下载中");
+                    }
+
+                    @Override
+                    public void onDownloadFailed(Exception e) {
+                        onReturnMessage("下载失败");
+                    }
+                });
+
+
+    }
+
 }
+

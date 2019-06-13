@@ -37,4 +37,17 @@ public class ClientFileUtils {
         client.newCall(request).enqueue(callback);
         return;
     }
+    public  static  void okHttpPost(String url, String openID, String filename, Callback callback){
+        Log.e("bbb",url+"\n"+openID+"\n"+filename);
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("openid", openID)
+                .add("filename", filename)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(body).build();
+        client.newCall(request).enqueue(callback);
+        return;
+    }
 }

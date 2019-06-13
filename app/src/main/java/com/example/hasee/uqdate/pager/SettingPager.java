@@ -1,7 +1,9 @@
 package com.example.hasee.uqdate.pager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
@@ -67,14 +69,35 @@ public class SettingPager extends BasePager {
         btn_logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              mTencent = Tencent.createInstance(APP_ID, mContext.getApplicationContext());
-              mTencent.logout(mContext);
-                SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
-                sph.open("login_info");
-                sph.putString("qname", "");
-                sph.putString("qimg", "");
-                sph.putString("openid", "");
-              gotoLoginActivity();
+                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                builder.setMessage("确定退出登陆吗")
+                        .setCancelable(false)
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                mTencent = Tencent.createInstance(APP_ID, mContext.getApplicationContext());
+                                mTencent.logout(mContext);
+                                SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+                                sph.open("login_info");
+                                sph.putString("qname", "");
+                                sph.putString("qimg", "");
+                                sph.putString("openid", "");
+                                gotoLoginActivity();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+               builder.show();
+//                mTencent = Tencent.createInstance(APP_ID, mContext.getApplicationContext());
+//              mTencent.logout(mContext);
+//                SharePrefrenceHelper sph = new SharePrefrenceHelper(mContext.getApplicationContext());
+//                sph.open("login_info");
+//                sph.putString("qname", "");
+//                sph.putString("qimg", "");
+//                sph.putString("openid", "");
+//              gotoLoginActivity();
             }
         });
 
